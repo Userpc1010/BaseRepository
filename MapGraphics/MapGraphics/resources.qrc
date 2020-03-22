@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>images/editdelete.png</file>
+        <file>images/edit_add.png</file>
+        <file>images/Marker_1.png</file>
+        <file>images/Marker_2.png</file>
+        <file>images/Marker_3.png</file>
+        <file>images/Marker_4.png</file>
+        <file>images/Marker_5.png</file>
+        <file>images/Plane_1.png</file>
+        <file>images/Plane_2.png</file>
+    </qresource>
+</RCC>

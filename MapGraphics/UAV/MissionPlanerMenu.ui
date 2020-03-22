@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MissionPlanerMenu</class>
+ <widget class="QWidget" name="MissionPlanerMenu">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>369</width>
+    <height>459</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Управление</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="5" column="0">
+    <widget class="QLabel" name="label_type_poit">
+     <property name="text">
+      <string>Тип точки:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="2">
+    <widget class="QPushButton" name="pushButton_return_rout">
+     <property name="text">
+      <string>Вернутся на маршрут</string>
+     </property>
+    </widget>
+   </item>
+   <item row="17" column="2">
+    <widget class="QLabel" name="label_3_gSpeed">
+     <property name="text">
+      <string>0.0</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="QComboBox" name="comboBox_type_point">
+     <property name="editable">
+      <bool>false</bool>
+     </property>
+     <property name="minimumContentsLength">
+      <number>3</number>
+     </property>
+     <property name="duplicatesEnabled">
+      <bool>false</bool>
+     </property>
+     <item>
+      <property name="text">
+       <string>Путевая точка</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Взлёт</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Посадка</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="17" column="1">
+    <widget class="QLabel" name="label_5_distamce">
+     <property name="text">
+      <string>0.0</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0">
+    <widget class="QLabel" name="label_climb">
+     <property name="text">
+      <string>Угол атаки:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="22" column="1">
+    <widget class="QLabel" name="label_Gyro_cal">
+     <property name="text">
+      <string>0.0</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="20" column="0">
+    <widget class="QLabel" name="label_turn_GNSS">
+     <property name="text">
+      <string>0.0</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="19" column="0" colspan="4">
+    <widget class="QLabel" name="label_name_tele_2">
+     <property name="text">
+      <string>Направление GNSS/Тонгаж/Крен/Рысканье</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2" colspan="2">
+    <widget class="QPushButton" name="pushButton_delete_rout">
+     <property name="text">
+      <string>Удалить маршрут</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="2">
+    <widget class="QLabel" name="label_radius_circle">
+     <property name="text">
+      <string>Радиус круга:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="17" column="0">
+    <widget class="QLabel" name="label_turn_mag">
+     <property name="text">
+      <string>0.0</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="14" column="0" colspan="4">
+    <widget class="QLabel" name="label_Table_info_cal_stat">
+     <property name="font">
+      <font>
+       <family>Arial</family>
+       <pointsize>10</pointsize>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="layoutDirection">
+      <enum>Qt::LeftToRight</enum>
+     </property>
+     <property name="lineWidth">
+      <number>2</number>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="22" column="0">
+    <widget class="QLabel" name="label_Sys_cal">
+     <property name="text">
+      <string>0.0</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="22" column="2">
+    <widget class="QLabel" name="label_Acc_cal">
+     <property name="text">
+      <string>0.0</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="3">
+    <widget class="QSpinBox" name="spinBox_radius_circle">
+     <property name="maximum">
+      <number>250</number>
+     </property>
+     <property name="value">
+      <number>20</number>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="2">
+    <widget class="QPushButton" name="pushButton_connection">
+     <property name="text">
+      <string>Подключить</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0" colspan="4">
+    <widget class="QPushButton" name="pushButton_find_gps">
+     <property name="text">
+      <string>Поиск по координатам долгота/широта:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="22" column="3">
+    <widget class="QLabel" name="label_Mag_cal">
+     <property name="text">
+      <string>0.0</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="label_alt">
+     <property name="text">
+      <string>Высота точки:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="28" column="0" colspan="4">
+    <widget class="QSlider" name="horizontalSlider_Truster">
+     <property name="minimum">
+      <number>0</number>
+     </property>
+     <property name="maximum">
+      <number>255</number>
+     </property>
+     <property name="pageStep">
+      <number>1</number>
+     </property>
+     <property name="value">
+      <number>0</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="invertedControls">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="2">
+    <widget class="QLabel" name="label_radius_point">
+     <property name="text">
+      <string>Радиус точки:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="2" colspan="2">
+    <widget class="QLineEdit" name="lineEdit_Find_to_lat">
+     <property name="maxLength">
+      <number>12</number>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2" colspan="2">
+    <widget class="QPushButton" name="pushButton_save_calibration">
+     <property name="text">
+      <string>Калибровка</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="2" colspan="2">
+    <widget class="QPushButton" name="pushButton_recalibration">
+     <property name="text">
+      <string>Перекалибровка</string>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="20" column="1">
+    <widget class="QLabel" name="label_pitch">
+     <property name="text">
+      <string>0.0</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="3">
+    <widget class="QSpinBox" name="spinBox_radius_point">
+     <property name="minimum">
+      <number>3</number>
+     </property>
+     <property name="maximum">
+      <number>250</number>
+     </property>
+     <property name="value">
+      <number>6</number>
+     </property>
+    </widget>
+   </item>
+   <item row="15" column="0" colspan="4">
+    <widget class="QLabel" name="label_name_tele_1">
+     <property name="text">
+      <string>Направлени компас/Дальность/Скорость/Высота</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="20" column="3">
+    <widget class="QLabel" name="label_yaw">
+     <property name="text">
+      <string>0.0</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="2">
+    <widget class="QPushButton" name="pushButton_load_rout">
+     <property name="text">
+      <string>Загрузить маршрут</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2" colspan="2">
+    <widget class="QPushButton" name="pushButton_reserved">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Стоп</string>
+     </property>
+    </widget>
+   </item>
+   <item row="17" column="3">
+    <widget class="QLabel" name="label_4_altitude">
+     <property name="text">
+      <string>0.0</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="1">
+    <widget class="QSpinBox" name="spinBox_climb">
+     <property name="maximum">
+      <number>45</number>
+     </property>
+     <property name="value">
+      <number>15</number>
+     </property>
+    </widget>
+   </item>
+   <item row="20" column="2">
+    <widget class="QLabel" name="label_roll">
+     <property name="text">
+      <string>0.0</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1">
+    <widget class="QSpinBox" name="spinBox_alt">
+     <property name="maximum">
+      <number>5000</number>
+     </property>
+     <property name="value">
+      <number>15</number>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="0" colspan="2">
+    <widget class="QLineEdit" name="lineEdit_Find_to_lon">
+     <property name="maxLength">
+      <number>12</number>
+     </property>
+    </widget>
+   </item>
+   <item row="24" column="3">
+    <widget class="QPushButton" name="pushButton_del_calib">
+     <property name="text">
+      <string>Удалить калибровку</string>
+     </property>
+    </widget>
+   </item>
+   <item row="24" column="0">
+    <widget class="QCheckBox" name="checkBox_cocking">
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Ручное</string>
+     </property>
+    </widget>
+   </item>
+   <item row="24" column="1">
+    <widget class="QCheckBox" name="checkBox_Manul_mode">
+     <property name="text">
+      <string>Кнопки</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

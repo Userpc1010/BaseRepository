@@ -20,7 +20,7 @@ adafruit_bno055_offsets_t Calib_data;
 // Проверка времени отправки телеметрии и опрос датчика
 uint16_t bno_count = 0, telemetry_count = 0;
 
-float pitch, roll, yaw; bool circle = false; int16_t mag_dec = 0;
+float pitch, roll, yaw, last_pitch, last_roll, last_yaw; bool circle = false; int16_t mag_dec = 0;
 
 sensors_event_t event;             //Событие получения точки 
 
@@ -79,11 +79,7 @@ void setup()
 
  long bnoID;
  bool foundCalib = false;
-<<<<<<< HEAD
  uint8_t dist = 0;
-=======
- uint8_t dist;
->>>>>>> 39dc8ac6ed763f6e9cb0dd4cdacc930c622576dc
 
  EEPROM.get( 0 , bnoID);
  sensor_t sensor;
@@ -270,7 +266,6 @@ void loop()
     bno_count = 0;
       
     bno.getEvent(&event);
-<<<<<<< HEAD
 
     rawTemp =  readBMP280Temperature(); bmp280_compensate_T(rawTemp);  
     
@@ -281,28 +276,14 @@ void loop()
     if ( type_point == 1 || type_point == 2 || Sonar ) altitude_offset = altitude - (echo_duration / 5800.0f);
     
     altitude -= altitude_offset;
-=======
-      
-    rawPress =  readBMP280Pressure();
-    BMP280Pressure = (float) bmp280_compensate_P(rawPress)/25600.; // Prwssure в mbar
-    
-    altitude = (1.0f - pow((BMP280Pressure/1013.25f), 0.190284f)) * (echo_duration / 58) * 0.49f; 
->>>>>>> 39dc8ac6ed763f6e9cb0dd4cdacc930c622576dc
 
     pitch = event.orientation.y;
     roll = event.orientation.z;
     yaw = event.orientation.x;
-<<<<<<< HEAD
     yaw += mag_dec; // Смещение на угол магнитного склонения
   
     if(yaw < -180) yaw += 360.0f; //Востанавливаем результат смещения по типу +180/-180
     if(yaw >  180) yaw -= 360.0f;  
-=======
-    
-    yaw += mag_dec; //Смещение на угол магнитного склонения
-    if(yaw < 0) yaw += 360.0f; // Ensure yaw stays between 0 and 360
-    if(yaw > 360) yaw -= 360.0f;  
->>>>>>> 39dc8ac6ed763f6e9cb0dd4cdacc930c622576dc
     }
 
     turns();//Поворот 
@@ -354,10 +335,7 @@ void serialUSBEvent()
 
 void turns ()
 {  
-<<<<<<< HEAD
   
-=======
->>>>>>> 39dc8ac6ed763f6e9cb0dd4cdacc930c622576dc
  Alt_pid( altitude );
  
  Bank_pid ( yaw );  

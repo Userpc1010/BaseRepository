@@ -66,27 +66,16 @@ enum BMP280SBy {
 // Specify BMP280 configuration
 uint8_t BMP280Posr = P_OSR_16, BMP280Tosr = T_OSR_02, BMP280Mode = normal, BMP280IIRFilter = BW0_042ODR, BMP280SBy = t_62_5ms;     // set pressure amd temperature output data rate
 // t_fine carries fine temperature as global value for BMP280
-<<<<<<< HEAD
 int32_t t_fine, rawPress, rawTemp; // pressure raw count output for BMP280
-=======
-int32_t t_fine, rawPress; // pressure raw count output for BMP280
->>>>>>> 39dc8ac6ed763f6e9cb0dd4cdacc930c622576dc
 
 // BMP280 compensation parameters
 uint16_t dig_T1, dig_P1;
 int16_t  dig_T2, dig_T3, dig_P2, dig_P3, dig_P4, dig_P5, dig_P6, dig_P7, dig_P8, dig_P9;
 
-<<<<<<< HEAD
 float altitude, altitude_offset ;
 
 double BMP280Pressure; // stores MS5637 pressures sensor pressure and temperature
 
-=======
-float altitude;
-double BMP280Pressure; // stores MS5637 pressures sensor pressure and temperature
-
-
->>>>>>> 39dc8ac6ed763f6e9cb0dd4cdacc930c622576dc
 // Функции чтения/запсии по I2C
 
         void writeByte(uint8_t address, uint8_t subAddress, uint8_t data)
@@ -138,7 +127,6 @@ int32_t bmp280_compensate_T(int32_t adc_T)
 uint32_t bmp280_compensate_P(int32_t adc_P)
 {
   long long var1, var2, p;
-<<<<<<< HEAD
   var1 = ((long long)t_fine ) - 128000;
   var2 = var1 * var1 * (long long)dig_P6;
   var2 = var2 + ((var1 * (long long)dig_P5)<<17);
@@ -147,20 +135,10 @@ uint32_t bmp280_compensate_P(int32_t adc_P)
   var1 = (((((long long)1)<<47) + var1))*((long long)dig_P1)>>33;
   
   if (var1 == 0)
-=======
-  var1 = ((long long)t_fine) - 128000;
-  var2 = var1 * var1 * (long long)dig_P6;
-  var2 = var2 + ((var1*(long long)dig_P5)<<17);
-  var2 = var2 + (((long long)dig_P4)<<35);
-  var1 = ((var1 * var1 * (long long)dig_P3)>>8) + ((var1 * (long long)dig_P2)<<12);
-  var1 = (((((long long)1)<<47)+var1))*((long long)dig_P1)>>33;
-  if(var1 == 0)
->>>>>>> 39dc8ac6ed763f6e9cb0dd4cdacc930c622576dc
   {
     return 0;
     // avoid exception caused by division by zero
   }
-<<<<<<< HEAD
   
   p = 1048576 - adc_P;
   p = (((p<<31) - var2) * 3125) / var1;
@@ -168,13 +146,6 @@ uint32_t bmp280_compensate_P(int32_t adc_P)
   var2 = (((long long)dig_P8) * p)>> 19;
   p = ((p + var1 + var2) >> 8) + (((long long)dig_P7)<<4);
   
-=======
-  p = 1048576 - adc_P;
-  p = (((p<<31) - var2)*3125)/var1;
-  var1 = (((long long)dig_P9) * (p>>13) * (p>>13)) >> 25;
-  var2 = (((long long)dig_P8) * p)>> 19;
-  p = ((p + var1 + var2) >> 8) + (((long long)dig_P7)<<4);
->>>>>>> 39dc8ac6ed763f6e9cb0dd4cdacc930c622576dc
   return (uint32_t)p;
 }
 

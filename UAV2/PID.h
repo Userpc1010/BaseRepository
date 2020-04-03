@@ -76,8 +76,7 @@ void Bank_pid ( int16_t yaw )
 
  if ( set_point_roll < -30 ) set_point_roll = -30;
 
- Last_Bank = millis();
-
+ Last_Bank = millis(); time_charg_Bank = 0;
  } 
 }
 
@@ -100,8 +99,7 @@ void Alt_pid ( float alt )
 
  if ( set_point_pitch < -climb_angle) set_point_pitch = -climb_angle;
 
- Last_Alt = millis();
- 
+ Last_Alt = millis(); time_charg_Alt = 0;
  }
 }
 
@@ -157,6 +155,6 @@ void Deviation ( int16_t pitch, int16_t roll,  int16_t yaw, bool circle )
 
  FlyMet = true;
 
- Last_Deviation = millis();
+ Last_Deviation = millis(); time_charg_Deviation = 0; 
  }
 }

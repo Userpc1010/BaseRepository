@@ -52,7 +52,7 @@ void Config_Widget::Show_config_Widget(QByteArray data)
 
      this->ui->doubleSpinBox_Max_pitch_error_pid->setValue(limit.Error_Pitch_Max);
      this->ui->doubleSpinBox_Max_roll_error_pid->setValue(limit.Error_Roll_Max);
-     this->ui->doubleSpinBox_Max_roll_error_pid->setValue(limit.Error_Yaw_Max);
+     this->ui->doubleSpinBox_Max_yaw_error_pid->setValue(limit.Error_Yaw_Max);
 
      this->ui->doubleSpinBox_Min_pitch_error_pid->setValue(limit.Error_Pitch_Min);
      this->ui->doubleSpinBox_Min_roll_error_pid->setValue(limit.Error_Roll_Min);

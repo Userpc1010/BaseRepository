@@ -63,6 +63,45 @@ struct PID
 
 };
 
+struct Trimm
+{
+
+ float Left_V_Tail = 0.0f; //0.5f;
+ float Right_V_Tail = 0.0f; //1.0f;
+
+ float Left_Eleron = 0.0f; //0.5f;
+ float Right_Eleron = 0.0f; //1.0f;
+
+ float Magnetick_decclination = 0.0f;
+ float Offset_pitch = 0.0f;
+ float Offset_roll = 0.0f;
+};
+
+struct Limit
+{
+
+ float Pitch_Max = 0.0f;
+ float Pitch_Min = 0.0f;
+
+ float Roll_Max = 0.0f;
+ float Roll_Min = 0.0f;
+
+ float Yaw_Max = 0.0f;
+ float Yaw_Min = 0.0f;
+
+ float Bank_Max = 0.0f;
+ float Bank_Min = 0.0f;
+
+ float Error_Pitch_Max = 0.0f;
+ float Error_Pitch_Min = 0.0f;
+
+ float Error_Roll_Max = 0.0f;
+ float Error_Roll_Min = 0.0f;
+
+ float Error_Yaw_Max = 0.0f;
+ float Error_Yaw_Min = 0.0f;
+};
+
 #endif // DATA_H
 
 

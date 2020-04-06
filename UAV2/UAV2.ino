@@ -20,7 +20,7 @@ adafruit_bno055_offsets_t Calib_data;
 // Проверка времени отправки телеметрии и опрос датчика
 uint16_t bno_count = 0, telemetry_count = 0;
 
-float pitch, roll, yaw, last_pitch, last_roll, last_yaw; bool circle = false; int16_t mag_dec = 0;
+float pitch, roll, yaw, last_pitch, last_roll, last_yaw; bool circle = false; int16_t mag_dec = 0; int8_t offset_pitch = 0, offset_roll = 0; 
 
 sensors_event_t event;             //Событие получения точки 
 
@@ -252,7 +252,11 @@ void setup()
 
   delay(2000);
 
-  EEPROM.get ( 32, PID ); 
+  EEPROM.get( 32, PID );  // Загрузка коэффицентов
+
+  EEPROM.get( 74, Trimm ); // Загрузка тримеров
+
+  EEPROM.get( 106, Limit ); // Загрузка ограничений
 
   sp_Send("Start");
 }
@@ -280,10 +284,13 @@ void loop()
     pitch = event.orientation.y;
     roll = event.orientation.z;
     yaw = event.orientation.x;
+    
     yaw += mag_dec; // Смещение на угол магнитного склонения
-  
-    if(yaw < -180) yaw += 360.0f; //Востанавливаем результат смещения по типу +180/-180
-    if(yaw >  180) yaw -= 360.0f;  
+    pitch += offset_pitch;
+    roll += offset_roll;
+    
+    if(yaw < -180.0f) yaw += 360.0f; //Востанавливаем результат смещения по типу +180/-180
+    if(yaw >  180.0f) yaw -= 360.0f;  
     }
 
     turns();//Поворот 
@@ -354,13 +361,13 @@ void Fly_metod ()
 {
   FlyMet = false;
   
-  A3_LEFT_VTAIL.write ((Yaw_pid_out + Pitch_pid_out) * 0.5f + 90 );
+  A3_LEFT_VTAIL.write ((Yaw_pid_out + Pitch_pid_out)  *  0.5f + Trimm.Left_V_Tail );
   
-  A4_RIGHT_VTAIL.write ((Yaw_pid_out - Pitch_pid_out) * 0.5f + 90 );
+  A4_RIGHT_VTAIL.write ((Yaw_pid_out - Pitch_pid_out) *  0.5f + Trimm.Right_V_Tail );
 
-  A5_Left_roll.write (Roll_pid_out  + 90 ); 
+  A5_Left_roll.write (Roll_pid_out  +  Trimm.Left_Eleron ); 
   
-  A6_Right_roll.write (Roll_pid_out  + 90 ); 
+  A6_Right_roll.write (Roll_pid_out  +  Trimm.Right_Eleron ); 
 
   A2_Trottle.writeMicroseconds( map(Trottle, 0, 255, 800, 2200));  //Тяга двигателя
 }
@@ -443,19 +450,43 @@ void ParseCommand()
 
      if ( sp_dataString[0] == 'M' && sp_dataString[1] == 'o' && sp_dataString[2] == 'v' && sp_dataString[3] == 'e')
      {    
-       uint8_t ee = 4; uint8_t* p = (uint8_t*)(void*)&Move; for( int count = data_length - 4; count ; --count ) *p++ = sp_dataString[ee++];
+       uint8_t ee = 4; uint8_t* p = (uint8_t*)(void*)&Move; for( int count = data_length - ee; count ; --count ) *p++ = sp_dataString[ee++];
 
-      circle = Move.circle;  type_point = Move.type_point; climb_angle = Move.climb; set_point_alt = Move.alt; set_point_bank = Move.azimut; set_point_yaw = Move.azimut; mag_dec = Move.mag_dec;
+       circle = Move.circle;  type_point = Move.type_point; climb_angle = Move.climb; set_point_alt = Move.alt; set_point_bank = Move.azimut; set_point_yaw = Move.azimut; 
      } 
 
      if ( sp_dataString[0] == 'P' && sp_dataString[1] == 'I' && sp_dataString[2] == 'D' && sp_dataString[3] == '1')
      {    
-       uint8_t ee = 4; uint8_t* p = (uint8_t*)(void*)&PID; for( int count = data_length - 4; count ; --count ) *p++ = sp_dataString[ee++]; EEPROM.put( 32, PID );
+       uint8_t ee = 4; uint8_t* p = (uint8_t*)(void*)&PID; for( int count = data_length - ee; count ; --count ) *p++ = sp_dataString[ee++]; EEPROM.put( 32, PID );
      } 
 
      if ( sp_dataString[0] == 'P' && sp_dataString[1] == 'I' && sp_dataString[2] == 'D' && sp_dataString[3] == '0')
      {    
         EEPROM.get( 32, PID ); Send_PID (); 
+     } 
+
+      if ( sp_dataString[0] == 'T' && sp_dataString[1] == 'R' && sp_dataString[2] == 'I' && sp_dataString[3] == 'M' && sp_dataString[4] == '1')
+     {    
+       uint8_t ee = 5; uint8_t* p = (uint8_t*)(void*)&Trimm; for( int count = data_length - ee; count ; --count ) *p++ = sp_dataString[ee++]; 
+       
+       mag_dec = Trimm.Magnetick_decclination; offset_pitch = Trimm.Offset_pitch; offset_roll = Trimm.Offset_roll;
+       
+       EEPROM.put( 74, Trimm );
+     } 
+
+     if ( sp_dataString[0] == 'T' && sp_dataString[1] == 'R' && sp_dataString[2] == 'I' && sp_dataString[3] == 'M' && sp_dataString[4] == '0' )
+     {    
+        EEPROM.get( 74, Trimm ); Send_Trimm (); 
+     } 
+
+      if ( sp_dataString[0] == 'L' && sp_dataString[1] == 'I' && sp_dataString[2] == 'M' && sp_dataString[3] == '1' )
+     {    
+       uint8_t ee = 4; uint8_t* p = (uint8_t*)(void*)&Limit; for( int count = data_length - ee; count ; --count ) *p++ = sp_dataString[ee++]; EEPROM.put( 106, Limit );
+     } 
+
+     if ( sp_dataString[0] == 'L' && sp_dataString[1] == 'I' && sp_dataString[2] == 'M' && sp_dataString[3] == '0' )
+     {    
+        EEPROM.get( 106, Limit ); Send_Limit (); 
      } 
 }
 
@@ -534,7 +565,7 @@ void Del_Calibration_Data ()
 
 void Del_PID_Data ()
 {
-   for (int i = 32; i < 74; i++ ) EEPROM.writeByte( i, 0 );
+   for (int i = 32; i < 72; i++ ) EEPROM.writeByte( i, 0 );
   
    sp_Send("DL2");
 }

@@ -36,7 +36,7 @@
     <property name="title">
      <string>&amp;Окна</string>
     </property>
-    <addaction name="action_PID"/>
+    <addaction name="action_config"/>
    </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
@@ -67,12 +67,12 @@
     <string>Ctrl+X</string>
    </property>
   </action>
-  <action name="action_PID">
+  <action name="action_config">
    <property name="text">
-    <string>Настройки PID</string>
+    <string>Настройки</string>
    </property>
    <property name="toolTip">
-    <string>Настроки ПИД регуляторв</string>
+    <string>Настроки ПИД регуляторов, тримеров и лимитов</string>
    </property>
   </action>
  </widget>

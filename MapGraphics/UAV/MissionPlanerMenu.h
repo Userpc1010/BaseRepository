@@ -26,7 +26,7 @@ signals:
 
  void connection ();
 
- void Show_PID (QByteArray data);
+ void Send_Config (QByteArray data);
 
  void writeserver (QByteArray _data);
 

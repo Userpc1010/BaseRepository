@@ -148,4 +148,14 @@ void UART_Protokol::ParseCommand()
   {
       uint8_t ee = 0; QByteArray data; for( uint16_t count = data_length; count ; --count ) data += sp_dataString[ee++]; emit ServerWrite (data);
   }
+
+  if ( sp_dataString[0] == 'L' && sp_dataString[1] == 'I' && sp_dataString[2] == 'M') //Настройки ПИД
+  {
+    uint8_t ee = 0; QByteArray data; for( uint16_t count = data_length; count ; --count ) data += sp_dataString[ee++];  emit ServerWrite (data);
+  }
+
+  if ( sp_dataString[0] == 'T' && sp_dataString[1] == 'R' && sp_dataString[2] == 'I' && sp_dataString[3] == 'M') //Настройки ПИД
+  {
+      uint8_t ee = 0; QByteArray data; for( uint16_t count = data_length; count ; --count ) data += sp_dataString[ee++]; emit ServerWrite (data);
+  }
 }

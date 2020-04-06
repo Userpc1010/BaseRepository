@@ -21,7 +21,7 @@ signals:
 
     void write_to_server(QByteArray data);
 
-    void Show_PID (QByteArray data);
+    void Send_Config (QByteArray data);
 
 private slots:
 
@@ -31,11 +31,13 @@ private slots:
 
     void keyReleaseEvent(QKeyEvent* e);
 
+    void closeEvent(QCloseEvent *event);
+
     void cocking (bool cocking);
 
-    void on_action_PID_triggered();
+    void on_action_config_triggered();
 
-    void ref_Show_PID (QByteArray data);
+    void ref_Send_Config (QByteArray data);
 
     void ref_write_to_server (QByteArray data);
 

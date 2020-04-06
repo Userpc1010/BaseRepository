@@ -195,7 +195,6 @@ QImage *MapTileSource::fromDiskCache(const QString &cacheID)
 
         return 0;
     }
- /*
 
     else
     {
@@ -203,7 +202,7 @@ QImage *MapTileSource::fromDiskCache(const QString &cacheID)
 
          qDebug()<<"Old Time: "<< expireTime<<"Current time : "<< QDateTime::currentDateTimeUtc();
     }
-*/
+
 
 
     if (!fp.open(QFile::ReadOnly))

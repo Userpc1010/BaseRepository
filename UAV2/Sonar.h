@@ -3,7 +3,6 @@
 #define trigPin 26                                    // Pin 12 trigger output
 #define echoPin 27                                    // Pin 2 Echo input
 
-
 volatile uint32_t echo_start = 0;                         // Records start of echo pulse 
 volatile uint32_t echo_end = 0;                           // Records end of echo pulse
 volatile uint16_t echo_duration = 0;                      // Duration - difference between end and start

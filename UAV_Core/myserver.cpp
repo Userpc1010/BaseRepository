@@ -61,10 +61,10 @@ void MyServer::read()
       if ( arr == "MN0")send_uart("MN0");
       if ( arr == "MN1")send_uart("MN1");
       if ( arr == "PID0")send_uart("PID0");
+      if ( arr == "LIM0")send_uart("LIM0");
+      if ( arr == "TRIM0")send_uart("TRIM0");
       if ( arr == "dp")send_uart("dp");
       if ( arr == "dc")send_uart("dc");
-
-
 
       if (arr[0] == 'M' && arr[1] == 'O' && arr[2] == 'V' && arr[3] == 'E' ) send_point(arr);
 
@@ -72,18 +72,19 @@ void MyServer::read()
 
       if (arr[0] == 'P' && arr[1] == 'I' && arr[2] == 'D' && arr[3] == '1' ) send_uart(arr);
 
+      if (arr[0] == 'L' && arr[1] == 'I' && arr[2] == 'M' && arr[3] == '1' ) send_uart(arr);
+
+      if (arr[0] == 'T' && arr[1] == 'R' && arr[2] == 'I' && arr[3] == 'M' && arr[4] == '1' ) send_uart(arr);
+
 
       if( arr[0] == 't' && arr[1] == 'r') send_uart(arr);
 
 
-      if( arr == "Disconnected") socket->deleteLater();
 }
 
 void MyServer::disconect()
 
 { 
-    socket->write("Disconnection");
-
     socket->deleteLater();
 
     lock = false;

@@ -67,11 +67,12 @@ MissionPlanerMenu::~MissionPlanerMenu()
      plane(plane_marker);
     }
 
-     if (point [0] == 'P' && point[1] == 'I' && point[2] == 'D') {
+     if (point [0] == 'P' && point[1] == 'I' && point[2] == 'D') emit Send_Config (point);
 
-     emit Show_PID(point);
+     if (point [0] == 'L' && point[1] == 'I' && point[2] == 'M') emit Send_Config (point);
 
-     }
+     if (point [0] == 'T' && point[1] == 'R' && point[2] == 'I'  && point[3] == 'M') emit Send_Config (point);
+
  }
 
 void MissionPlanerMenu::on_pushButton_find_gps_clicked()

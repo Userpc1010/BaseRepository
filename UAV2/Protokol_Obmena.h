@@ -4,6 +4,8 @@ const char sp_startMarker [5] = "<@#>";    // Переменная, содерж
 const char sp_stopMarker  [5] = "<&^>";    // Переменная, содержащая маркер конца пакета
 const char sp_telemetry  [5] = "TELE";     // Отправка телеметрии
 const char sp_PID [4] = "PID";             // Отправка 
+const char sp_Lim [4] = "LIM";             // Отправка
+const char sp_Trimm [5] = "TRIM";             // Отправка  
 const uint8_t sp_MarkerLength = 4;         // Переменная длинны маркера -1
 unsigned char sp_dataString [255];            // Здесь будут храниться принимаемые данные 
 uint8_t sp_startMarkerStatus;                 // Флаг состояния маркера начала пакета
@@ -29,7 +31,6 @@ struct Move
  int16_t alt = 0;
  uint8_t climb = 0;
  uint8_t type_point = 0;
- int16_t mag_dec = 0;
  bool circle = false; 
 
 }Move;
@@ -66,6 +67,47 @@ struct PID
  float D_Yaw = 0.0f; //2.0f; 
   
 }PID; 
+
+struct Trimm
+{
+  
+ float Left_V_Tail = 0.0f; //0.5f;
+ float Right_V_Tail = 0.0f; //1.0f;
+
+ float Left_Eleron = 0.0f; //0.5f;
+ float Right_Eleron = 0.0f; //1.0f;
+
+ float Magnetick_decclination = 0.0f;
+ float Offset_pitch = 0.0f;
+ float Offset_roll = 0.0f;
+  
+}Trimm;
+
+struct Limit
+{
+  
+ float Pitch_Max = 0.0f;
+ float Pitch_Min = 0.0f;
+
+ float Roll_Max = 0.0f;
+ float Roll_Min = 0.0f;
+
+ float Yaw_Max = 0.0f;
+ float Yaw_Min = 0.0f;
+
+ float Bank_Max = 0.0f;
+ float Bank_Min = 0.0f;
+
+ float Error_Pitch_Max = 0.0f;
+ float Error_Pitch_Min = 0.0f;
+
+ float Error_Roll_Max = 0.0f;
+ float Error_Roll_Min = 0.0f;
+
+ float Error_Yaw_Max = 0.0f;
+ float Error_Yaw_Min = 0.0f;
+ 
+}Limit;  
 
 void sp_Reset()
 {
@@ -176,6 +218,29 @@ void Send_PID ()
   Serial3.print(sp_PID);             // Отправляем заголовок
   
   byte* b = (byte*) &PID; for(size_t i = 0; i < sizeof(PID); i++) Serial3.write(*b++); //Отправляем сами данные
+  
+  Serial3.print(sp_stopMarker);                                      // Отправляем маркер конца пакета
+}
+
+void Send_Trimm ()
+{
+  Serial3.print(sp_startMarker);           // Отправляем маркер начала пакета
+  Serial3.write(sizeof(Trimm) + 4);    // Отправляем длину передаваемых данных
+  Serial3.print(sp_Trimm);             // Отправляем заголовок
+  
+  byte* b = (byte*) &Trimm; for(size_t i = 0; i < sizeof(Trimm); i++) Serial3.write(*b++); //Отправляем сами данные
+  
+  Serial3.print(sp_stopMarker);                                      // Отправляем маркер конца пакета
+}
+
+
+void Send_Limit ()
+{
+  Serial3.print(sp_startMarker);           // Отправляем маркер начала пакета
+  Serial3.write(sizeof(Limit) + 3);    // Отправляем длину передаваемых данных
+  Serial3.print(sp_Lim);             // Отправляем заголовок
+  
+  byte* b = (byte*) &Limit; for(size_t i = 0; i < sizeof(Limit); i++) Serial3.write(*b++); //Отправляем сами данные
   
   Serial3.print(sp_stopMarker);                                      // Отправляем маркер конца пакета
 }

@@ -16,17 +16,17 @@ SOURCES += main.cpp\
         MainWindow.cpp \
     MissionPlanerMenu.cpp \
     MyTcpServer.cpp \
-    PID_Widget.cpp
+    Config_Widget.cpp
 
 HEADERS  += MainWindow.h \
     MissionPlanerMenu.h \
     MyTcpServer.h \
     Data.h \
-    PID_Widget.h
+    Config_Widget.h
 
 FORMS    += MainWindow.ui \
     MissionPlanerMenu.ui \
-    PID_Widget.ui
+    Config_Widget.ui
 
 #Linkage for MapGraphics shared library
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../MapGraphics/release/ -lMapGraphics

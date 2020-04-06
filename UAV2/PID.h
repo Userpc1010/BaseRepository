@@ -27,11 +27,10 @@ bool FlyMet = false; //Микширование сервомашинок
 
 //FIR фильтр производной расчитывается по пяти точкам взят из INAV 1.1
 const uint8_t filterLength = 5;
-
+const int8_t coeffBuf [filterLength] = {5, 2, -8, -2, 3};
 int16_t shiftBuf_pitch [filterLength] = {0, 0, 0, 0, 0};
 int16_t shiftBuf_roll [filterLength] = {0, 0, 0, 0, 0};
 int16_t shiftBuf_yaw [filterLength] = {0, 0, 0, 0, 0};
-int16_t coeffBuf [filterLength] = {5, 2, -8, -2, 3};
 
 
 void filterUpdateFIR( int16_t * shiftBuf, int16_t newSample)
@@ -56,15 +55,15 @@ float filterApplyFIR( int16_t * shiftBuf, float commonMultiplier)
 }
 
 
-void Bank_pid ( int16_t yaw )
+void Bank_pid ( float yaw )
 {
 
  time_charg_Bank = millis() - Last_Bank;  if( time_charg_Bank >= 92 && !Manual ){ 
   
- int16_t Error = set_point_bank - yaw;
+ float Error = set_point_bank - yaw;
 
- if (Error < -180) Error += 360;// Делаем результат вычетания вида -180 +180
- if (Error >  180) Error -= 360;
+ if (Error < -180.0f) Error += 360.0f;// Делаем результат вычетания вида -180 +180
+ if (Error >  180.0f) Error -= 360.0f;
 
  float Delta =  (Error - LastError_bank) / time_charg_Bank;
 
@@ -72,9 +71,9 @@ void Bank_pid ( int16_t yaw )
 
  set_point_roll = ( PID.P_Bank * Error + PID.D_Bank * Delta);
 
- if ( set_point_roll > 30 ) set_point_roll = 30;
+ if ( set_point_roll > Limit.Bank_Max ) set_point_roll = Limit.Bank_Max;
 
- if ( set_point_roll < -30 ) set_point_roll = -30;
+ if ( set_point_roll < Limit.Bank_Min ) set_point_roll = Limit.Bank_Min;
 
  Last_Bank = millis(); time_charg_Bank = 0;
  } 
@@ -104,31 +103,35 @@ void Alt_pid ( float alt )
 }
 
 
-void Deviation ( int16_t pitch, int16_t roll,  int16_t yaw, bool circle )
+void Deviation ( float pitch, float roll,  float yaw, bool circle )
 {
   
  time_charg_Deviation = millis() - Last_Deviation; if ( time_charg_Deviation >= 12 ){ 
 
- int16_t Error_Pitch = set_point_pitch - pitch;
+ float Error_Pitch = set_point_pitch - pitch;
  
- int16_t Error_Roll = set_point_roll - roll;
+ float Error_Roll = set_point_roll - roll;
 
  if( Manual){ set_point_yaw = yaw + vifish_angle; //Ручное управление разворот град/дельта т
  
- if (set_point_yaw < -180) set_point_yaw += 360;// Делаем результат вычетания вида -180 +180
- if (set_point_yaw >  180) set_point_yaw -= 360;
+ if (set_point_yaw < -180.0f) set_point_yaw += 360.0f;// Делаем результат вычетания вида -180 +180
+ if (set_point_yaw >  180.0f) set_point_yaw -= 360.0f;
  }
  
- int16_t Error_Yaw = set_point_yaw - yaw;
+ float Error_Yaw = set_point_yaw - yaw;
 
  if (circle && !Manual) Error_Yaw = Error_Yaw + set_point_pitch;// Вращение вокруг точки
 
- if (Error_Yaw < -180) Error_Yaw += 360;// Делаем результат вычетания вида -180 +180
- if (Error_Yaw >  180) Error_Yaw -= 360;
+ if (Error_Yaw < -180.0f) Error_Yaw += 360.0f;// Делаем результат вычетания вида -180 +180
+ if (Error_Yaw >  180.0f) Error_Yaw -= 360.0f;
 
- if (Error_Yaw < -60) Error_Yaw = -60;
- if (Error_Yaw >  60) Error_Yaw = 60;
+ if (Error_Yaw < Limit.Error_Yaw_Min) Error_Yaw = Limit.Error_Yaw_Min;
+ if (Error_Roll < Limit.Error_Roll_Min) Error_Roll = Limit.Error_Roll_Min;
+ if (Error_Pitch <  Limit.Error_Pitch_Min) Error_Pitch =  Limit.Error_Pitch_Min;
  
+ if (Error_Yaw >  Limit.Error_Yaw_Max) Error_Yaw =  Limit.Error_Yaw_Max;
+ if (Error_Roll >  Limit.Error_Roll_Max) Error_Roll =  Limit.Error_Roll_Max;
+ if (Error_Pitch >  Limit.Error_Pitch_Max) Error_Pitch =  Limit.Error_Pitch_Max;
  
  filterUpdateFIR( shiftBuf_pitch, pitch); float Delta_Pitch = filterApplyFIR ( shiftBuf_pitch, PID.D_Pitch / (8 * time_charg_Deviation));
 
@@ -144,14 +147,13 @@ void Deviation ( int16_t pitch, int16_t roll,  int16_t yaw, bool circle )
  Yaw_pid_out =  PID.P_Yaw * Error_Yaw + Delta_Yaw;
 
 
- if ( Yaw_pid_out < -60  )  Yaw_pid_out = -60.0f; // Делаем результат вида 0 - 60
- if ( Yaw_pid_out > 60   )  Yaw_pid_out = 60.0f;
-
- if ( Roll_pid_out > 60  )  Roll_pid_out = 60.0f; 
- if ( Roll_pid_out < -60 )  Roll_pid_out = -60.0f; 
-
- if ( Pitch_pid_out > 60 )  Pitch_pid_out = 60.0f; 
- if ( Pitch_pid_out < -60)  Pitch_pid_out = -60.0f; 
+ if ( Yaw_pid_out > Limit.Yaw_Max )  Yaw_pid_out = Limit.Yaw_Max;
+ if ( Roll_pid_out > Limit.Roll_Max )  Roll_pid_out = Limit.Roll_Max;
+ if ( Pitch_pid_out > Limit.Pitch_Max )  Pitch_pid_out = Limit.Pitch_Max;
+ 
+ if ( Yaw_pid_out < Limit.Yaw_Min )  Yaw_pid_out = Limit.Yaw_Min;  
+ if ( Roll_pid_out < Limit.Roll_Min )  Roll_pid_out = Limit.Roll_Min;  
+ if ( Pitch_pid_out < Limit.Pitch_Min )  Pitch_pid_out = Limit.Pitch_Min; 
 
  FlyMet = true;
 

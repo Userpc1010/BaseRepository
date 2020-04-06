@@ -34,15 +34,6 @@ int main(int argc, char *argv[])
 
 
 
-
-    QObject::connect (&a,&QCoreApplication::destroyed,        &Server, &MyServer::deleteLater, Qt::QueuedConnection);
-
-    QObject::connect (&a,&QCoreApplication::destroyed,        &Serial, &UART_Protokol::deleteLater, Qt::QueuedConnection);
-
-    QObject::connect (&a,&QCoreApplication::destroyed,        &GPMS, &UART_GPS_GSM::deleteLater, Qt::QueuedConnection);
-
-
-
     QObject::connect (&Serial,&UART_Protokol::ServerWrite,    &Server,&MyServer::write, Qt::QueuedConnection);
 
     QObject::connect (&Server,&MyServer::send_uart,           &Serial, &UART_Protokol::sp_Send, Qt::QueuedConnection);
@@ -55,7 +46,6 @@ int main(int argc, char *argv[])
 
     QObject::connect (&Serial,&UART_Protokol::Telemetriy,     &GPMS,&UART_GPS_GSM::telemetry, Qt::QueuedConnection);
 
-    QObject::connect (&a,&QCoreApplication::destroyed,        &Server,&MyServer::deleteLater, Qt::QueuedConnection);
 
 
     Server.startserver();

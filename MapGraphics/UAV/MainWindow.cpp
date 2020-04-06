@@ -12,7 +12,7 @@
 #include "MissionPlaner.h"
 #include "MissionPlanerMenu.h"
 #include "MyTcpServer.h"
-#include "PID_Widget.h"
+#include "Config_Widget.h"
 
 #include <QSharedPointer>
 #include <QtDebug>
@@ -59,10 +59,8 @@ MainWindow::MainWindow(QWidget *parent) :
     this->ui->dockWidget_2->toggleViewAction()->setText("&Упрвление");
 
     connect(menu, SIGNAL(connection()),                       server, SLOT(connection()));
-    connect(this, SIGNAL(destroyed()),                        server, SLOT(deleteLater()));
     connect(menu, SIGNAL(writeserver(QByteArray)),            server, SLOT(write(QByteArray)));
     connect(server, SIGNAL(reciver(QByteArray)),              menu, SLOT(reciverdata(QByteArray)));
-    connect(this, SIGNAL(destroyed()),                        menu, SLOT(deleteLater()));
 
 
     connect(view, SIGNAL(mapClicked_Left(QPointF)),           menu, SLOT(MoveToPoint(QPointF)));
@@ -71,7 +69,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(view, SIGNAL(remove_all()),                       menu, SLOT(removeRoute()));
     connect(menu, SIGNAL(plane (QPointF)),                    view, SLOT(plane_marker (QPointF)));
     connect(menu, SIGNAL(find_to_map (QPointF)),              view, SLOT(find_marker (QPointF)));
-    connect(menu, SIGNAL(Show_PID(QByteArray)),               this, SLOT(ref_Show_PID(QByteArray)));
+    connect(menu, SIGNAL(Send_Config(QByteArray)),            this, SLOT(ref_Send_Config(QByteArray)));
 
     connect(this, SIGNAL(write_to_server(QByteArray)),        server, SLOT(write(QByteArray)));
     connect(menu, SIGNAL(cocking_(bool)),                     this, SLOT(cocking(bool)));
@@ -91,7 +89,7 @@ MainWindow::~MainWindow()
 //private slot
 void MainWindow::on_actionExit_triggered()
 {
-    this->close();
+   this->close();
 }
 
 void MainWindow::cocking(bool cocking)
@@ -157,27 +155,35 @@ void MainWindow::keyReleaseEvent(QKeyEvent* e)
      e->accept();
 }
 
-void MainWindow::on_action_PID_triggered()
+void MainWindow::closeEvent(QCloseEvent *event)
 {
-    PID_Widget * PID_config_widget = new PID_Widget();
-    PID_config_widget->setAttribute(Qt::WA_DeleteOnClose);
-
-    connect(this, SIGNAL(destroyed()),      PID_config_widget, SLOT(deleteLater()));
-
-    connect(PID_config_widget,SIGNAL(writeserver(QByteArray)), this, SLOT(ref_write_to_server(QByteArray)));
-
-    connect(this, SIGNAL (Show_PID(QByteArray)),   PID_config_widget, SLOT(Show_config_PID (QByteArray)));
-
-    PID_config_widget->show();
+   event->accept();
+   emit destroyed();
 }
 
-void MainWindow::ref_Show_PID(QByteArray data)
+void MainWindow::on_action_config_triggered()
 {
-  emit Show_PID(data);
+    Config_Widget * config_widget = new Config_Widget();
 
+    config_widget->setAttribute(Qt::WA_DeleteOnClose);
+
+    connect(this, SIGNAL(destroyed()),  config_widget, SLOT(deleteLater()));
+
+    connect(config_widget,SIGNAL(writeserver(QByteArray)), this, SLOT(ref_write_to_server(QByteArray)));
+
+    connect(this, SIGNAL (Send_Config(QByteArray)),  config_widget, SLOT(Show_config_Widget (QByteArray)));
+
+    config_widget->show();
+}
+
+void MainWindow::ref_Send_Config(QByteArray data)
+{
+  emit Send_Config(data);
 }
 
 void MainWindow::ref_write_to_server(QByteArray data)
 {
    emit write_to_server(data);
 }
+
+

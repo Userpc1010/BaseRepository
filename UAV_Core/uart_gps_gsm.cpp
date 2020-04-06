@@ -137,9 +137,9 @@ void UART_GPS_GSM::GSM() //Приём сообщений от модема
 
     if ( data == "AT+CSCS=\"GSM\"\r\r\nOK\r\n") Initializing_GSM(4);
 
-    if ( data ==  "\r\nRING\r\n\r\n+CLIP: \"7918791****\",145,,,\"\",0\r\n" && ini ){ type_client = 1; send_cordinat_SMS(1);} // Звонок
+    if ( data ==  "\r\nRING\r\n\r\n+CLIP: \"79187910029\",145,,,\"\",0\r\n" && ini ){ type_client = 1; send_cordinat_SMS(1);} // Звонок
 
-    if ( data ==  "\r\nRING\r\n\r\n+CLIP: \"7918767****\",145,,,\"\",0\r\n" && ini ){ type_client = 2; send_cordinat_SMS(1);} // Звонок
+    if ( data ==  "\r\nRING\r\n\r\n+CLIP: \"79187675957\",145,,,\"\",0\r\n" && ini ){ type_client = 2; send_cordinat_SMS(1);} // Звонок
 
     if ( data == "\r\nNO CARRIER\r\n") { Tele_process("Call"); qDebug()<< "Вызов окончен"; }
 
@@ -147,9 +147,9 @@ void UART_GPS_GSM::GSM() //Приём сообщений от модема
 
     if ( data == "ATH\r\r\nOK\r\n") send_cordinat_SMS(2);
 
-    if ( data == "AT+CMGS=\"+7918791***\"\r\r\n> ") send_cordinat_SMS(3);
+    if ( data == "AT+CMGS=\"+79187910029\"\r\r\n> ") send_cordinat_SMS(3);
 
-    if ( data == "AT+CMGS=\"+7918767****\"\r\r\n> ") send_cordinat_SMS(3);
+    if ( data == "AT+CMGS=\"+79187675957\"\r\r\n> ") send_cordinat_SMS(3);
 
     if ( data == "AT+CPAS\r\r\n+CPAS: 0\r\n\r\nOK\r\n" || data == "AT+CPAS\r\r\n+CPAS: 3\r\n\r\nOK\r\n" || data == "AT+CPAS\r\r\n+CPAS: 4\r\n\r\nOK\r\n") last = 0;
 
@@ -185,14 +185,14 @@ void UART_GPS_GSM::send_cordinat_SMS ( const uint8_t step ) //Отправка �
 
    if (step == 2 && type_client == 1) { last = 0;
 
-       QString hed = "AT+CMGS=\"+7918791****\"""\r";
+       QString hed = "AT+CMGS=\"+79187910029\"""\r";
 
        serialPuts(fd4, hed.toUtf8());
    }
 
    if (step == 2 && type_client == 2) { last = 0;
 
-       QString hed = "AT+CMGS=\"+7918767****\"""\r";
+       QString hed = "AT+CMGS=\"+79187675957\"""\r";
 
        serialPuts(fd4, hed.toUtf8());
    }
@@ -238,7 +238,7 @@ void UART_GPS_GSM::gsm_update() //Опрос модема на случай за
 
     if (!ini) last = 3;
 
-    if( current.fly_point != 0 && geoDistance() > 10 && si.g_speed > 3 && -5 > geoBearing() - si.heading < 5 )  _move_.mag_dec = Tele_u.yaw - si.heading;
+   // if( current.fly_point != 0 && geoDistance() > 10 && si.g_speed > 3 && -5 > geoBearing() - si.heading < 5 )  _move_.mag_dec = Tele_u.yaw - si.heading;
 
     //qDebug()<<Tele_u.yaw - si.heading;
 }
@@ -377,7 +377,7 @@ float UART_GPS_GSM::geoDistance () {  //Расстояние
 float UART_GPS_GSM::geoBearing () {  //Азимут на цель
   float y = sin(current.lon-si.lon) * cos(current.lat);
   float x = cos(si.lat)*sin(current.lat) - sin(si.lat)*cos(current.lat)*cos(current.lon - si.lon);
-  return atan2(y, x) * RADTODEG;
+  return atan2(y, x) * RADTODEG; //Результат вида  +180 /-180
 }
 
 

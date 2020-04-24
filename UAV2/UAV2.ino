@@ -277,7 +277,7 @@ void loop()
     
     altitude = 44307.69f * (1.0f - pow((BMP280Pressure/1013.25f), 0.190284f));
  
-    if ( type_point == 1 || type_point == 2 || Sonar ) altitude_offset = altitude - (echo_duration / 5800.0f);
+    if ( type_point == 1 || type_point == 2 || Sonar|| (echo_duration / 5800.0f) < 4.0f  ) altitude_offset = altitude - (echo_duration / 5800.0f);
     
     altitude -= altitude_offset;
 
